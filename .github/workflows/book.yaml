@@ -1,0 +1,52 @@
+name: Documents
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  PYTHON_VERSION: 3.13
+  POETRY_VERSION: 2.0.1
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Poetry
+        uses: abatilo/actions-poetry@v4.0.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Restore & Cache Poetry and Dependences
+        uses: actions/cache@v4
+        id: poetry-cache
+        with:
+          path: |
+            ~/.poetry
+            ~/.cache/pypoetry
+          key: ${{ env.PYTHON_VERSION }}-${{ env.POETRY_VERSION }}-${{ hashFiles('docs/poetry.lock') }}
+
+      - name: poetry install
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
+        run: poetry install --no-root
+        working-directory: book
+
+      - name: Build Document
+        run: |
+          poetry run mkdocs build
+        working-directory: book
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./book/site

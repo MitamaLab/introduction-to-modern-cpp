@@ -1,0 +1,105 @@
+name: Full Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ubuntu:
+    runs-on: ${{ matrix.compiler.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - cc: clang
+            cxx: clang++
+            ver: 19
+            os: ubuntu-24.04
+          - cc: gcc
+            cxx: g++
+            ver: 14
+            os: ubuntu-24.04
+    env:
+      CC: ${{ matrix.compiler.cc }}-${{ matrix.compiler.ver }}
+      CXX: ${{ matrix.compiler.cxx }}-${{ matrix.compiler.ver }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install CMake
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get install -y -qq pkg-config cmake
+
+      - name: Install Clang
+        if: startsWith(matrix.compiler.cxx, 'clang')
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x ./llvm.sh
+          sudo ./llvm.sh ${{ matrix.compiler.ver }}
+
+      - name: Install GCC
+        if: matrix.compiler.cxx == 'g++' && matrix.compiler.ver == 14
+        run: sudo apt update && sudo apt install -y gcc-14
+
+      - name: Install Catch2
+        run: vcpkg install catch2
+
+      - name: Build and test
+        run: |
+          cmake -S . -B build \
+            -DBUILD_TESTING=ON \
+            -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+          cmake --build build
+          cd build && ctest
+
+  windows:
+    runs-on: windows-${{ matrix.config.osver }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - vsver: "Visual Studio 17 2022"
+            osver: 2025
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Catch2
+        run: vcpkg install catch2
+
+      - name: Build and test
+        run: |
+          cmake -S . -B build `
+            -G "${{ matrix.config.vsver }}" -A x64 `
+            -DBUILD_TESTING=ON `
+            -DCMAKE_TOOLCHAIN_FILE="$($env:VCPKG_INSTALLATION_ROOT)/scripts/buildsystems/vcpkg.cmake"
+          cmake --build build
+          cd build && ctest
+
+  macos:
+    runs-on: macos-${{ matrix.env.osver }}
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - cxx: "$(brew --prefix llvm@18)/bin/clang++"
+            osver: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install vcpkg
+        run: |
+          cd ~
+          git clone https://github.com/microsoft/vcpkg
+          cd vcpkg
+          ./bootstrap-vcpkg.sh
+          ./vcpkg install catch2
+
+      - name: Build and test
+        run: |
+          cmake -S . -B build \
+            -DBUILD_TESTING=ON \
+            -DCMAKE_CXX_COMPILER=${{ matrix.env.cxx }} \
+            -DCMAKE_TOOLCHAIN_FILE="~/vcpkg/scripts/buildsystems/vcpkg.cmake"
+          cmake --build build
+          cd build && ctest

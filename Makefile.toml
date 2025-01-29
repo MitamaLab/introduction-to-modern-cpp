@@ -1,0 +1,15 @@
+[config]
+skip_core_tasks = true
+default_to_workspace = false
+
+[env]
+REPOSITORY_ROOT = { script = [ "git rev-parse --show-superproject-working-tree --show-toplevel" ] }
+
+[tasks.test]
+script_runner = "@shell"
+script = [
+    "cd $REPOSITORY_ROOT",
+    "cmake --build build",
+    "echo 'Running tests...'",
+    "./build/tests/tests",
+]

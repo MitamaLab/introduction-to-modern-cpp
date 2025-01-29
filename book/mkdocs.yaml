@@ -1,0 +1,53 @@
+# site configs
+site_name: Introduction to Modern C++
+site_url: https://loligothick.github.io/introduction-to-modern-cpp/
+site_description: Introduction to Modern C++
+site_author: Mitama
+
+# repository
+repo_name: https://loligothick.github.io/introduction-to-modern-cpp/
+repo_url: https://loligothick.github.io/introduction-to-modern-cpp/
+
+# theme settings
+theme:
+  name: 'material'
+  language: 'ja'
+  icon:
+    logo: material/cloud
+    repo: fontawesome/brands/github-alt
+  palette:
+    primary: 'teal'
+    accent: 'teal'
+  features:
+    - navigation.tabs
+    - navigation.instant
+  extra:
+    social:
+      - icon: fontawesome/brands/twitter
+        link: https://twitter.com/mitama_rs
+
+# extensions
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.smartsymbols
+  - mdx_math:
+      enable_dollar_delimiter: true
+  - toc:
+      permalink: True
+      separator: "_"
+      baselevel: 1
+
+# pages
+nav:
+  - Home: index.md
+  - '101': about.md
+  - Article: 
+    - '1. C++の基本的な言語機能①': article/section_1.md
+    - '2. C++の基本的な言語機能②': article/section_2.md
+    
