@@ -12,7 +12,7 @@ C言語互換機能として導入されましたが、配列には使えない�
 - 初期化順序は宣言順に従う必要があります
 - 省略すると、デフォルト値を使うか、なければデフォルト初期化します
 
-```cpp
+```cpp title="designated_init_struct.cpp"
 struct product {
     int id;
     int price;
@@ -32,9 +32,9 @@ aggregate になる条件は [cppreference](https://en.cppreference.com/w/cpp/la
 
 ### 2.1.2 Designated initializers (Since C++20)
 
-Union にも使える。当たり前だが、 designator はひとつしか指定できない。
+Union にも使える。当たり前だが、designator はひとつしか指定できない。
 
-```cpp
+```cpp title="designated_init_union.cpp"
 union uni {
     int a;
     int b;
@@ -49,7 +49,7 @@ int main() {
 
 ### 2.1.3 using enum (Since C++20)
 
-```cpp
+```cpp title="using_enum.cpp"
 enum class Flag {
     A,
     B,
@@ -73,7 +73,7 @@ int main() {
 
 関数オブジェクトをテンプレート引数に受け取るクラスにデフォルト構築可能なラムダ式の型を `decltype` を使って渡せるようになった。
 
-```cpp
+```cpp title="decltype_lambda_technic.cpp"
 #include <iostream>
 #include <set>
 

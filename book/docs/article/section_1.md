@@ -3,7 +3,7 @@
 C++23では `<print>` ライブラリが導入されたため、いきなり何もかも違います。
 `std::println` は書式付きで出力してくれる関数で、出力の末尾に改行が付きます。
 
-```cpp
+```cpp title="hello_cpp23_world.cpp"
 #include <print>
 
 int main() {

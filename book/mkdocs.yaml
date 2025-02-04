@@ -1,12 +1,12 @@
 # site configs
 site_name: Introduction to Modern C++
-site_url: https://loligothick.github.io/introduction-to-modern-cpp/
+site_url: https://mitamalab.github.io/introduction-to-modern-cpp/
 site_description: Introduction to Modern C++
 site_author: Mitama
 
 # repository
-repo_name: https://loligothick.github.io/introduction-to-modern-cpp/
-repo_url: https://loligothick.github.io/introduction-to-modern-cpp/
+repo_name: introduction-to-modern-cpp
+repo_url: https://github.com/MitamaLab/introduction-to-modern-cpp
 
 # theme settings
 theme:
@@ -32,6 +32,7 @@ markdown_extensions:
   - codehilite
   - footnotes
   - meta
+  - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.superfences
@@ -50,4 +51,5 @@ nav:
   - Article: 
     - '1. C++の基本的な言語機能①': article/section_1.md
     - '2. C++の基本的な言語機能②': article/section_2.md
+    - '3. クラス': article/section_3.md
     
