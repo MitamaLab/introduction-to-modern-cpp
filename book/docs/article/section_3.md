@@ -116,7 +116,6 @@ struct X {
    };
    ```
 
-2. TODO
+2. `virtual std::string_view what() const noexcept = 0` を持つ `error` 純粋仮想クラスを作ってください
 
-3. TODO
-
+3. `2.` で作った `error` クラスを継承してなんらかの具体的なクラスを実装してください
