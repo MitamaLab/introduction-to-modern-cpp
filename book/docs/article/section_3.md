@@ -12,7 +12,7 @@ public:
 }
 ```
 
-## Decucing this (Since C++23)
+## Deducing this (Since C++23)
 
 C++23 からは this ポインタを経由する以外にも、明示的に自分自身を受け取る書き方ができるようになりました。
 
