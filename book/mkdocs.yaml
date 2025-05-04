@@ -52,4 +52,5 @@ nav:
     - '1. C++の基本的な言語機能①': article/section_1.md
     - '2. C++の基本的な言語機能②': article/section_2.md
     - '3. クラス': article/section_3.md
-    
+    - '4. 分割コンパイル、ビルド': article/section_4.md
+    - '5. 配列、ポインター、右辺値参照': article/section_5.md
