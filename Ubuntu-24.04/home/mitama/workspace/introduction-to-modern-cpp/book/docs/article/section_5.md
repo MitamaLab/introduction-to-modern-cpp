@@ -84,8 +84,20 @@ public:
 
 ## 理解度チェック
 
-1. TODO
+1. 次のコードにおいて、`a`, `b`, `c`, `d` の型はそれぞれ何になるでしょうか？また、その理由を説明してください。
+   ```cpp
+   int i = 0;
+   int& get_ref() { return i; }
+   int get_val() { return i; }
 
-2. TODO
+   int main() {
+       decltype(auto) a = i;
+       decltype(auto) b = (i);
+       decltype(auto) c = get_ref();
+       decltype(auto) d = get_val();
+   }
+   ```
 
-3. TODO
+2. 左辺値と右辺値の主な違いは何ですか？また、左辺値参照 (`&`) と右辺値参照 (`&&`) は、それぞれどのような種類の値を束縛できますか？
+
+3. `std::move` の主な役割は何でしょうか？ `std::move` を呼び出すだけで、オブジェクトのリソース（所有権）は移動しますか？もし移動しない場合、実際にリソースの移動を行うのはどのような仕組みですか？
