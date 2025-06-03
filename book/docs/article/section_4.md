@@ -101,10 +101,11 @@ inline namespace は上級者向けの機能です。
 inline namespace を使うことによってデフォルトの関数を切り替えるという使い方です。
 
 ```cpp
-# include <iostream>
+#include <iostream>
 
 namespace my_lib {
   namespace v1 {
+    [[deprecated("v1 is deprecated, use v2 instead")]]
     void f()
     {
       std::cout << "v1" << std::endl;
