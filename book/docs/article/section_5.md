@@ -1,3 +1,41 @@
+## std::span
+
+`std::span` は、C++20 で追加された新しい型で、配列やベクターなどの連続したメモリ領域を参照するためのものです。
+`std::span` を使うことで、配列やベクターのサイズを明示的に指定することなく、部分的な配列を簡単に扱うことができます。
+
+```cpp
+#include <span>
+#include <vector>
+
+void process(std::span<int> data) {
+    for (auto& elem : data) {
+        // 処理
+    }
+}
+
+int main() {
+    std::vector<int> vec = {1, 2, 3, 4, 5};
+    process(vec); // std::vector から std::span への変換
+}
+```
+
+## emplace_back
+
+`std::vector` には `emplace_back` というメンバ関数があります。
+`emplace_back` を使うと、要素を追加する際にコンストラクタを呼び出すことなく、直接メモリに配置することができます。
+これにより、余分なコピーやムーブが発生せず、パフォーマンスが向上します。
+
+```cpp
+#include <vector>
+#include <string>
+
+int main() {
+    std::vector<std::string> vec;
+    vec.emplace_back("Hello");
+    vec.emplace_back("World");
+}
+```
+
 ## 型推論
 
 参照型の推論をする場合、`auto&` を使うことができます。
