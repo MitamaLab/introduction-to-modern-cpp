@@ -54,3 +54,4 @@ nav:
     - '3. クラス': article/section_3.md
     - '4. 分割コンパイル、ビルド': article/section_4.md
     - '5. 配列、ポインター、右辺値参照': article/section_5.md
+    - '6. 演算子オーバーロードの基本（基本ではないかも）': article/section_6.md

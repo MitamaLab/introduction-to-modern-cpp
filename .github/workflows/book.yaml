@@ -32,7 +32,6 @@ jobs:
           key: ${{ env.PYTHON_VERSION }}-${{ hashFiles('docs/poetry.lock') }}
 
       - name: poetry install
-        if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: poetry install --no-root
         working-directory: book
 
