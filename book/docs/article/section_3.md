@@ -12,9 +12,12 @@ public:
 }
 ```
 
-## Deducing this (Since C++23)
+## Explicit object parameter (Since C++23)
 
 C++23 からは this ポインタを経由する以外にも、明示的に自分自身を受け取る書き方ができるようになりました。
+次の例で、メンバ関数 `foo` が `this X const& self` を受け取るように書かれています。
+これが、明示的オブジェクトパラメータ (explicit object parameter) と呼ばれるものです。
+こう書くとメンバ関数を呼び出したインスタンスを `self` で受け取ることができます。
 
 ```cpp title="deducing_this.cpp"
 struct X {
@@ -37,8 +40,13 @@ struct X {
 ```
 
 ??? "ラムダ式とDeducing this"
-    ラムダ式は匿名クラスなので、Deducing this が使えます。
+    ラムダ式は匿名クラスなので、explicit object parameter が使えます。
     ラムダ式がラムダ式自身を受け取れるということなので、当然再帰的ラムダ式が書けます。
+    しかし、ラムダ式は名前を持たないので、ラムダ式がラムダ式自身を受け取るには、ラムダ式の型を推論する必要があります。
+    そこで、ラムダ式の型を推論するために、`auto` 型を使います。
+    このようにして、ラムダ式がラムダ式自身を受け取ることができます。
+    `auto` 型はテンプレート構文のシンタックスシュガーです。
+    このように explicit object parameter を推論させる方式を Deducing this と呼びます。
 
     ```cpp
     #include <utility>
@@ -53,7 +61,7 @@ struct X {
     ```
 
 ??? warning "Deducing this の真の力"
-    Deducing this はテンプレートを使ったときにすべての力を開放できます。
+    Deducing this はテンプレートメンバ関数を使ったときにすべての力を開放できます。
     テンプレートを用いると、const性や参照も含めて推論されるため、オーバーロードする必要がありません。
     cv-qualifier によるオーバーロードが全く違う処理をすることはほぼナイでしょうから、
     実践的には使うのはほぼ次のような見た目をした関数になるでしょう……。

@@ -40,11 +40,40 @@ int main()
 
 `v[3, 2, 1]` のように、 `operator[]` に複数の引数を渡すことができます。
 このコードは C++20 まではカンマ演算子として解釈されてしまい、意図した動作をしません。
-C++20では `operator[]` に複数の引数を渡すことは規格で非推奨に指定されています。
+C++20からは `operator[]` に複数の引数を渡すことは規格で非推奨に指定されています。
+C++20以前の挙動を期待する場合は、`v[(3, 2, 1)]` のように、引数を丸括弧で囲めばできます。
+
+## 演算子のオーバーロードと explicit object parameter (C++23)
+
+C++23 からは、メンバー関数として定義する演算子のオーバーロードにおいても explicit object parameter (3章を参照) を使うことができるようになりました。
+これはまだ利点がわからないかもしれないですが、テンプレートを使うときに威力を発揮します。
+
+```cpp
+#include <iostream>
+
+struct Test
+{
+	int value;
+
+	constexpr Test operator+(this auto const& self, Test const& other)
+	{
+		return Test{ .value = self.value + other.value };
+	}
+};
+
+int main()
+{
+	Test a{ 1 };
+	Test b{ 2 };
+	Test c = a + b;
+	std::cout << c.value << '\n';
+}
+```
 
 ## static overloaded operators (Since C++23)
 
 C++23からは this ポインタを持つ必要がない静的メンバー関数として `operator()` と `operator[]` をオーバーロードできるようになりました。
+this ポインタが存在しないため、explicit object parameter を使うこともできません。
 
 ### static call/subscript operator
 
@@ -87,38 +116,11 @@ void foo()
 
 同様にラムダ式も匿名クラスであるため、静的メンバー関数として `operator()` をオーバーロードできます。
 ラムダキャプチャが空のラムダ式であれば、`static` をつけることができます。
-`static` 指定すると、当然ですが this ポインタは存在しませんので `mutable` 指定はできません、ラムダ式のオブジェクトを受け取れないので Deducing this も使えません。
+当然ですが this ポインタは存在しませんので `mutable` 指定はできません、もちろん explicit object parameter も使えません。
 
 ```cpp
 []() static {}
 //   ^^^^^^ ここ
-```
-
-## 演算子のオーバーロードと Deducing this (C++23)
-
-C++23 からは、メンバー関数として定義する演算子のオーバーロードにおいても Deducing this (3章を参照) を使うことができるようになりました。
-これはまだ利点がわからないかもしれないですが、テンプレートを使うときに威力を発揮します。
-
-```cpp
-#include <iostream>
-
-struct Test
-{
-	int value;
-
-	constexpr Test operator+(this auto const& self, Test const& other)
-	{
-		return Test{ .value = self.value + other.value };
-	}
-};
-
-int main()
-{
-	Test a{ 1 };
-	Test b{ 2 };
-	Test c = a + b;
-	std::cout << c.value << '\n';
-}
 ```
 
 ## 三方比較演算子 `operator<=>` (Since C++20)
@@ -186,7 +188,7 @@ struct S {
 
 特殊メンバ関数と比較演算子は、`default` 指定と `delete` 指定を使うことができます。
 特殊メンバ関数とは、デフォルトコンストラクタ、コピーコンストラクタ、ムーブコンストラクタ、コピー代入演算子、ムーブ代入演算子、デストラクタのことです。
-比較演算子とは、`operator==`、`operator<=>`、`operator!=` (ただし、`operator==` が明示的に定義されている場合のみ)、`operator<` (だたし、`operator<=>` が明示的に定義されている場合のみ)、`operator<=` (だたし、`operator<=>` が明示的に定義されている場合のみ)、`operator>` (だたし、`operator<=>` が明示的に定義されている場合のみ)、`operator>=`  (だたし、`operator<=>` が明示的に定義されている場合のみ) のことです。
+比較演算子とは、`operator==`、`operator<=>`、`operator!=` (ただし、`operator==` が明示的に定義されている場合のみ)、`operator<` (ただし、`operator<=>` が明示的に定義されている場合のみ)、`operator<=` (ただし、`operator<=>` が明示的に定義されている場合のみ)、`operator>` (ただし、`operator<=>` が明示的に定義されている場合のみ)、`operator>=`  (ただし、`operator<=>` が明示的に定義されている場合のみ) のことです。
 
 まず、`delete` 指定について説明します。
 `delete` 指定を使うと、その関数の呼び出しをコンパイルエラーにすることができます。
@@ -215,8 +217,9 @@ struct NoCopy
 
 ## 理解度チェック
 
-1. TODO
+1. `static` 指定されたメンバー関数としての演算子オーバーロードとそうでないものを [Compiler Explorer](https://godbolt.org/) で比較してみましょう。
 
-2. TODO
+2. 
 
-3. TODO
+3. 三方比較演算子を定義することで、どのような利点がありますか？
+
