@@ -24,7 +24,7 @@ jobs:
       CC: ${{ matrix.compiler.cc }}-${{ matrix.compiler.ver }}
       CXX: ${{ matrix.compiler.cxx }}-${{ matrix.compiler.ver }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install CMake
         run: |
@@ -62,7 +62,7 @@ jobs:
           - vsver: "Visual Studio 17 2022"
             osver: 2025
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Catch2
         run: vcpkg install catch2
@@ -85,7 +85,7 @@ jobs:
           - cxx: "$(brew --prefix llvm@18)/bin/clang++"
             osver: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install vcpkg
         run: |
